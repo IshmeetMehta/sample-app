@@ -14,6 +14,24 @@ spec:
     spec:
       containers:
       - name: production-container
+        # Remember to replace <todo> with your actual production image path
         image: <todo>
         ports:
         - containerPort: 8080
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: production-service
+spec:
+  # This creates a separate LoadBalancer for the production service
+  type: LoadBalancer
+  selector:
+    # This selector must match the 'app: production-app' labels
+    app: production-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
