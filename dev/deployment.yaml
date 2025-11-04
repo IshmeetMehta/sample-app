@@ -17,3 +17,23 @@ spec:
         image: us-central1-docker.pkg.dev/qwiklabs-gcp-00-65081ea67625/my-repository/hello-cloudbuild-dev:v1.0
         ports:
         - containerPort: 8080
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: dev-service
+spec:
+  # This makes the service accessible from outside the cluster via a cloud load balancer.
+  type: LoadBalancer
+  selector:
+    # This selector must match the 'app: dev-app' labels in your Deployment's template.
+    app: dev-app
+  ports:
+    - protocol: TCP
+      # This is the port the Load Balancer will expose.
+      port: 80
+      # This is the port on the container that the service will forward traffic to.
+      # It must match the 'containerPort' in your Deployment.
+      targetPort: 8080
